@@ -54,7 +54,7 @@
             this.groupBox1.Size = new System.Drawing.Size(608, 53);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
+            this.groupBox1.Text = "Select source";
             // 
             // btnSetupSource
             // 
@@ -63,7 +63,7 @@
             this.btnSetupSource.Name = "btnSetupSource";
             this.btnSetupSource.Size = new System.Drawing.Size(22, 22);
             this.btnSetupSource.TabIndex = 1;
-            this.btnSetupSource.Text = "btnSetupSource";
+            this.btnSetupSource.Text = "...";
             this.btnSetupSource.UseVisualStyleBackColor = true;
             this.btnSetupSource.Click += new System.EventHandler(this.btnSetupSource_Click);
             // 
@@ -96,18 +96,20 @@
             this.btnNewDocument.Name = "btnNewDocument";
             this.btnNewDocument.Size = new System.Drawing.Size(100, 28);
             this.btnNewDocument.TabIndex = 2;
-            this.btnNewDocument.Text = "button1";
+            this.btnNewDocument.Text = "&New document";
             this.btnNewDocument.UseVisualStyleBackColor = true;
             // 
             // btnAddScan
             // 
             this.btnAddScan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnAddScan.Enabled = false;
             this.btnAddScan.Location = new System.Drawing.Point(118, 413);
             this.btnAddScan.Name = "btnAddScan";
             this.btnAddScan.Size = new System.Drawing.Size(100, 28);
             this.btnAddScan.TabIndex = 3;
-            this.btnAddScan.Text = "button2";
+            this.btnAddScan.Text = "Add &scans";
             this.btnAddScan.UseVisualStyleBackColor = true;
+            this.btnAddScan.Click += new System.EventHandler(this.btnAddScan_Click);
             // 
             // btnAddImage
             // 
@@ -116,7 +118,7 @@
             this.btnAddImage.Name = "btnAddImage";
             this.btnAddImage.Size = new System.Drawing.Size(100, 28);
             this.btnAddImage.TabIndex = 4;
-            this.btnAddImage.Text = "button3";
+            this.btnAddImage.Text = "Add &images";
             this.btnAddImage.UseVisualStyleBackColor = true;
             // 
             // btnDiscard
@@ -126,7 +128,7 @@
             this.btnDiscard.Name = "btnDiscard";
             this.btnDiscard.Size = new System.Drawing.Size(100, 28);
             this.btnDiscard.TabIndex = 5;
-            this.btnDiscard.Text = "button4";
+            this.btnDiscard.Text = "&Discard";
             this.btnDiscard.UseVisualStyleBackColor = true;
             // 
             // btnSave
@@ -136,7 +138,7 @@
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(100, 28);
             this.btnSave.TabIndex = 6;
-            this.btnSave.Text = "button5";
+            this.btnSave.Text = "S&ave";
             this.btnSave.UseVisualStyleBackColor = true;
             // 
             // groupBox2
@@ -150,7 +152,7 @@
             this.groupBox2.Size = new System.Drawing.Size(608, 320);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "groupBox2";
+            this.groupBox2.Text = "Document pages";
             // 
             // flpContentItems
             // 
@@ -177,7 +179,7 @@
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Main";
+            this.Text = "ScanToCloud";
             this.Load += new System.EventHandler(this.Main_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);

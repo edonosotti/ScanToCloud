@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTO\Document.cs" />
+    <Compile Include="DTO\Page.cs" />
     <Compile Include="DTO\Source.cs" />
     <Compile Include="Forms\Main.cs">
       <SubType>Form</SubType>
