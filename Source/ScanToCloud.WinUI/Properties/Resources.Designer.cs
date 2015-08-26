@@ -70,6 +70,15 @@ namespace ScanToCloud.WinUI.Properties {
         }
         
         /// <summary>
+        ///   Cerca una stringa localizzata simile a scan.pdf.
+        /// </summary>
+        internal static string DefaultFileName {
+            get {
+                return ResourceManager.GetString("DefaultFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Cerca una stringa localizzata simile a Cannot initialize scanner. Please check that it is correctly plugged in and enabled..
         /// </summary>
         internal static string ErrorCannotConnectToSource {
@@ -120,6 +129,15 @@ namespace ScanToCloud.WinUI.Properties {
         internal static string ErrorGeneric {
             get {
                 return ResourceManager.GetString("ErrorGeneric", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Please add some pages before saving..
+        /// </summary>
+        internal static string ErrorNoPages {
+            get {
+                return ResourceManager.GetString("ErrorNoPages", resourceCulture);
             }
         }
         

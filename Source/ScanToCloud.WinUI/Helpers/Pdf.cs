@@ -11,14 +11,16 @@ namespace ScanToCloud.WinUI.Helpers
         // Logger instance
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public static bool Render(DTO.Document source, Common.ImageSizeMode sizeMode)
+        public static bool Render(string fileName, DTO.Document source, Common.ImageSizeMode sizeMode)
         {
             try
             {
                 Document document = new Document();
 
                 document.Info.Title = source.Title;
-                document.Info.Comment = "";
+                document.Info.Author = source.Author;
+                document.Info.Subject = source.Subject;
+                document.Info.Keywords = source.Keywords;
 
                 document.DefaultPageSetup.TopMargin = 0;
                 document.DefaultPageSetup.BottomMargin = 0;
@@ -67,8 +69,7 @@ namespace ScanToCloud.WinUI.Helpers
 
                 pdfRenderer.RenderDocument();
 
-                const string filename = "C:\\stc.pdf";
-                pdfRenderer.PdfDocument.Save(filename);
+                pdfRenderer.PdfDocument.Save(fileName);
 
                 return true;
             }

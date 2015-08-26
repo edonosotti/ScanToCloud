@@ -120,6 +120,9 @@
   <data name="AppTitle" xml:space="preserve">
     <value>ScanToCloud</value>
   </data>
+  <data name="DefaultFileName" xml:space="preserve">
+    <value>scan.pdf</value>
+  </data>
   <data name="ErrorCannotConnectToSource" xml:space="preserve">
     <value>Cannot initialize scanner. Please check that it is correctly plugged in and enabled.</value>
   </data>
@@ -137,6 +140,9 @@
   </data>
   <data name="ErrorGeneric" xml:space="preserve">
     <value>Generic error.</value>
+  </data>
+  <data name="ErrorNoPages" xml:space="preserve">
+    <value>Please add some pages before saving.</value>
   </data>
   <data name="LabelScannerSelected" xml:space="preserve">
     <value>Scanner</value>

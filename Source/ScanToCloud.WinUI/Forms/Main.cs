@@ -159,6 +159,12 @@ namespace ScanToCloud.WinUI.Forms
             FlushTemporaryData();
             CurrentDocument = new Document() { TempPath = GetTempFolder() };
             UpdateDocumentPreview();
+            tabDocument.SelectedIndex = 0;
+
+            txtTitle.Text = string.Empty;
+            txtAuthor.Text = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            txtSubject.Text = string.Empty;
+            txtKeywords.Text = string.Empty;
         }
 
         private string GetTempFolder()
@@ -194,6 +200,7 @@ namespace ScanToCloud.WinUI.Forms
             CurrentDocument.Pages.Add(page);
 
             UpdateDocumentPreview();
+            tabDocument.SelectedIndex = 1;
         }
 
         private void UpdateDocumentPreview()
@@ -204,7 +211,7 @@ namespace ScanToCloud.WinUI.Forms
             {
                 Image source = Image.FromFile(page.Path);
                 PictureBox box = new PictureBox() { Width = 100, Height = 140, SizeMode = PictureBoxSizeMode.CenterImage };
-                box.MouseMove += new System.Windows.Forms.MouseEventHandler(OnMouseMove);
+                box.MouseMove += new MouseEventHandler(OnMouseMove);
                 Bitmap bitmap = new Bitmap(box.Width, box.Height, PixelFormat.Format32bppPArgb);
                 Graphics graphics = Graphics.FromImage(bitmap);
                 graphics = Graphics.FromImage(bitmap);
@@ -279,6 +286,41 @@ namespace ScanToCloud.WinUI.Forms
                 }
 
                 UpdateDocumentPreview();
+                tabDocument.SelectedIndex = 1;
+            }
+        }
+
+        private void SavePdf()
+        {
+            if (!CurrentDocument.Pages.Any())
+            {
+                MessageBox.Show(Resources.ErrorNoPages, Resources.AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var sfd = new SaveFileDialog();
+
+            sfd.Filter = "PDF|*.pdf";
+            sfd.FilterIndex = 0;
+            sfd.OverwritePrompt = true;
+
+            sfd.FileName = (!string.IsNullOrEmpty(CurrentDocument.FileName)) ?
+                CurrentDocument.FileName :
+                ((!string.IsNullOrEmpty(txtTitle.Text)) ? txtTitle.Text : "scan.pdf");
+
+            foreach (var c in Path.GetInvalidFileNameChars())
+            {
+                sfd.FileName = sfd.FileName.Replace(c, '_');
+            }
+
+            if (sfd.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(sfd.FileName))
+            {
+                var fitMode = (chkImageFit.Checked) ? Common.ImageSizeMode.Stretch : Common.ImageSizeMode.Fit;
+
+                if (Pdf.Render(sfd.FileName, CurrentDocument, fitMode))
+                {
+                    CurrentDocument.FileName = sfd.FileName;
+                }
             }
         }
 
@@ -479,7 +521,27 @@ namespace ScanToCloud.WinUI.Forms
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            Pdf.Render(CurrentDocument, Common.ImageSizeMode.Fit);
+            SavePdf();
+        }
+
+        private void txtTitle_TextChanged(object sender, EventArgs e)
+        {
+            CurrentDocument.Title = txtTitle.Text;
+        }
+
+        private void txtAuthor_TextChanged(object sender, EventArgs e)
+        {
+            CurrentDocument.Author = txtAuthor.Text;
+        }
+
+        private void txtSubject_TextChanged(object sender, EventArgs e)
+        {
+            CurrentDocument.Subject = txtSubject.Text;
+        }
+
+        private void txtKeywords_TextChanged(object sender, EventArgs e)
+        {
+            CurrentDocument.Keywords = txtKeywords.Text;
         }
     }
 }
