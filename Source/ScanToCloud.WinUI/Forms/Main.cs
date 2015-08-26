@@ -17,6 +17,9 @@ namespace ScanToCloud.WinUI.Forms
 {
     public partial class Main : Form
     {
+        // Logger instance
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         // ==================================================
         // Class properties
         // ==================================================
@@ -251,6 +254,8 @@ namespace ScanToCloud.WinUI.Forms
         private void HandleError(string message, Exception error = null)
         {
             MessageBox.Show(message, Resources.ErrorCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            Log.Error(message, error);
         }
 
         // ==================================================
@@ -260,13 +265,11 @@ namespace ScanToCloud.WinUI.Forms
         // ==================================================
 
         /// <summary>
-        /// Debugging output that we can monitor, this is just a place
-        /// holder for this particular application...
+        /// Debugging output from the source
         /// </summary>
-        /// <param name="a_szOutput"></param>
-        private void WriteOutput(string a_szOutput)
+        private void WriteOutput(string output)
         {
-            return;
+            Log.Debug(output);
         }
         
         /// <summary>
