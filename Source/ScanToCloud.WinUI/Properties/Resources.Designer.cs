@@ -151,6 +151,15 @@ namespace ScanToCloud.WinUI.Properties {
         }
         
         /// <summary>
+        ///   Cerca una stringa localizzata simile a Drag to reorder, right click to delete.
+        /// </summary>
+        internal static string PageToolTip {
+            get {
+                return ResourceManager.GetString("PageToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Cerca una stringa localizzata simile a You have an unsaved document. Discard all pages?.
         /// </summary>
         internal static string WarningDiscardPages {

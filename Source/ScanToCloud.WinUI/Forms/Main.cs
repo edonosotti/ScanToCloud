@@ -82,6 +82,16 @@ namespace ScanToCloud.WinUI.Forms
             }
         }
 
+        private void SetupUI()
+        {
+            foreach (var button in GetControls(this, typeof(Button)).Where(w => w.BackgroundImage != null))
+            {
+                button.BackgroundImageLayout = ImageLayout.Center;
+                new ToolTip().SetToolTip(button, button.Text.Replace("&", ""));
+                button.Text = string.Empty;
+            }
+        }
+
         private void ParseSources(string[] sources)
         {
             Sources = new List<Source>();
@@ -212,6 +222,8 @@ namespace ScanToCloud.WinUI.Forms
                 Image source = Image.FromFile(page.Path);
                 PictureBox box = new PictureBox() { Width = 100, Height = 140, SizeMode = PictureBoxSizeMode.CenterImage };
                 box.MouseMove += new MouseEventHandler(OnMouseMove);
+                box.MouseClick += new MouseEventHandler(OnMouseClick);
+                new ToolTip().SetToolTip(box, Resources.PageToolTip);
                 Bitmap bitmap = new Bitmap(box.Width, box.Height, PixelFormat.Format32bppPArgb);
                 Graphics graphics = Graphics.FromImage(bitmap);
                 graphics = Graphics.FromImage(bitmap);
@@ -246,6 +258,14 @@ namespace ScanToCloud.WinUI.Forms
             var item = CurrentDocument.Pages.Where(w => w.Id.Equals(pageId)).First();
             CurrentDocument.Pages.Remove(item);
             CurrentDocument.Pages.Insert(newIdx, item);
+
+            UpdateDocumentPreview();
+        }
+
+        private void RemovePage(string pageId)
+        {
+            var item = CurrentDocument.Pages.Where(w => w.Id.Equals(pageId)).First();
+            CurrentDocument.Pages.Remove(item);
 
             UpdateDocumentPreview();
         }
@@ -347,6 +367,16 @@ namespace ScanToCloud.WinUI.Forms
             return null;
         }
 
+        // Taken from http://stackoverflow.com/questions/3419159/how-to-get-all-child-controls-of-a-windows-forms-form-of-a-specific-type-button
+        public IEnumerable<Control> GetControls(Control control, Type type)
+        {
+            var controls = control.Controls.Cast<Control>();
+
+            return controls.SelectMany(ctrl => GetControls(ctrl, type))
+                                      .Concat(controls)
+                                      .Where(c => c.GetType() == type);
+        }
+
         // ==================================================
         // Application Event handlers
         // ==================================================
@@ -437,6 +467,7 @@ namespace ScanToCloud.WinUI.Forms
         private void Main_Load(object sender, EventArgs e)
         {
             CreateNewDocument();
+            SetupUI();
             InitTwain();
         }
 
@@ -542,6 +573,15 @@ namespace ScanToCloud.WinUI.Forms
         private void txtKeywords_TextChanged(object sender, EventArgs e)
         {
             CurrentDocument.Keywords = txtKeywords.Text;
+        }
+
+        private void OnMouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var item = (PictureBox)sender;
+                RemovePage(item.Name);
+            }
         }
     }
 }
