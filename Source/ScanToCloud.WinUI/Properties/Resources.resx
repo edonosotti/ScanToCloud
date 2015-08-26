@@ -126,8 +126,14 @@
   <data name="ErrorCannotInitTwain" xml:space="preserve">
     <value>Could not initialize TWAIN driver or find a suitable scanner. Please make sure that a scanner and its drivers are correctly installed.</value>
   </data>
+  <data name="ErrorCannotSetSourceCapabilities" xml:space="preserve">
+    <value>Scanner does not support some required capabilities.</value>
+  </data>
   <data name="ErrorCaption" xml:space="preserve">
     <value>Errore</value>
+  </data>
+  <data name="ErrorGeneric" xml:space="preserve">
+    <value>Generic error.</value>
   </data>
   <data name="LabelScannerSelected" xml:space="preserve">
     <value>Scanner</value>

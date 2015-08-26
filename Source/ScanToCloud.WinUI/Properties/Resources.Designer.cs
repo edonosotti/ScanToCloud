@@ -88,11 +88,29 @@ namespace ScanToCloud.WinUI.Properties {
         }
         
         /// <summary>
+        ///   Cerca una stringa localizzata simile a Scanner does not support some required capabilities..
+        /// </summary>
+        internal static string ErrorCannotSetSourceCapabilities {
+            get {
+                return ResourceManager.GetString("ErrorCannotSetSourceCapabilities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Cerca una stringa localizzata simile a Errore.
         /// </summary>
         internal static string ErrorCaption {
             get {
                 return ResourceManager.GetString("ErrorCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Generic error..
+        /// </summary>
+        internal static string ErrorGeneric {
+            get {
+                return ResourceManager.GetString("ErrorGeneric", resourceCulture);
             }
         }
         

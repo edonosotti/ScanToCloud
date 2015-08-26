@@ -21,9 +21,9 @@ namespace ScanToCloud.WinUI.Forms
         // Class properties
         // ==================================================
 
-        TWAINCSToolkit TwainToolkit;
-        List<Source> Sources = new List<Source>();
-        Document CurrentDocument;
+        private TWAINCSToolkit TwainToolkit;
+        private List<Source> Sources = new List<Source>();
+        private Document CurrentDocument;
 
         // ==================================================
         // Constructors
@@ -103,15 +103,33 @@ namespace ScanToCloud.WinUI.Forms
 
         private void SetSelectedSource(int idx)
         {
+            btnAddScan.Enabled = false;
+
             if (Sources.Any() && Sources[idx] != null)
             {
                 var identity = Sources[idx].Identity;
                 var status = "";
+
                 TwainToolkit.Send("DG_CONTROL", "DAT_IDENTITY", "MSG_SET", ref identity, ref status);
+
                 if (TwainToolkit.Send("DG_CONTROL", "DAT_IDENTITY", "MSG_OPENDS", ref identity, ref status) != TWAINCSToolkit.STS.SUCCESS)
                 {
-                    btnAddScan.Enabled = false;
                     HandleError(Resources.ErrorCannotConnectToSource);
+                    return;
+                }
+
+                var capabilities = "ICAP_XFERMECH,TWON_ONEVALUE,TWTY_UINT16,2";
+                if (TwainToolkit.Send("DG_CONTROL", "DAT_CAPABILITY", "MSG_SET", ref capabilities, ref status) != TWAINCSToolkit.STS.SUCCESS)
+                {
+                    HandleError(Resources.ErrorCannotSetSourceCapabilities);
+                    return;
+                }
+
+                capabilities = "CAP_INDICATORS,TWON_ONEVALUE,TWTY_UINT16," + (Settings.Default.ShowDriverMessages ? "1" : "0");
+                if (TwainToolkit.Send("DG_CONTROL", "DAT_CAPABILITY", "MSG_SET", ref capabilities, ref status) != TWAINCSToolkit.STS.SUCCESS)
+                {
+                    HandleError(Resources.ErrorCannotSetSourceCapabilities);
+                    return;
                 }
 
                 btnAddScan.Enabled = true;
