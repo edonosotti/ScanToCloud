@@ -172,9 +172,12 @@ namespace ScanToCloud.WinUI.Forms
 
         private void AddPage(Bitmap source)
         {
+            var id = Guid.NewGuid().ToString();
+
             var page = new Page()
             {
-                Path = Path.Combine(CurrentDocument.TempPath, string.Format("{0}.jpg", Guid.NewGuid())),
+                Id = id,
+                Path = Path.Combine(CurrentDocument.TempPath, string.Format("{0}.jpg", id)),
                 IsTemporaryFile = true
             };
             
@@ -220,12 +223,49 @@ namespace ScanToCloud.WinUI.Forms
                 graphics.FillRectangle(brush, rectangle);
                 graphics.DrawImage(source, new Rectangle(((int)bitmap.Width - iWidth) / 2, ((int)bitmap.Height - iHeight) / 2, iWidth, iHeight));
                 box.Image = bitmap;
+                box.Name = page.Id;
                 box.Update();
 
                 flpContentItems.Controls.Add(box);
             }
 
-            flpContentItems.Update();
+            flpContentItems.Invalidate();
+        }
+
+        private void MovePage(string pageId, int newIdx)
+        {
+            var item = CurrentDocument.Pages.Where(w => w.Id.Equals(pageId)).First();
+            CurrentDocument.Pages.Remove(item);
+            CurrentDocument.Pages.Insert(newIdx, item);
+
+            UpdateDocumentPreview();
+        }
+
+        private void LoadImage()
+        {
+            var ofd = new OpenFileDialog();
+
+            ofd.Filter = "Image files|*.jpg;*.jpeg;*.bmp;*.png;*.gif;*.tif;*.tiff";
+            ofd.FilterIndex = 0;
+            ofd.Multiselect = true;
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                foreach (var file in ofd.FileNames)
+                {
+                    var id = Guid.NewGuid().ToString();
+
+                    var page = new Page()
+                    {
+                        Id = id,
+                        Path = file
+                    };
+
+                    CurrentDocument.Pages.Add(page);
+                }
+
+                UpdateDocumentPreview();
+            }
         }
 
         private bool IsCustomDsDataSupported()
@@ -383,6 +423,27 @@ namespace ScanToCloud.WinUI.Forms
                 Control control = sender as Control;
                 control.DoDragDrop(control, DragDropEffects.Move);
             }
+        }
+
+        private void flpContentItems_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.All;
+        }
+
+        private void flpContentItems_DragDrop(object sender, DragEventArgs e)
+        {
+            PictureBox data = (PictureBox)e.Data.GetData(typeof(PictureBox));
+            FlowLayoutPanel _destination = (FlowLayoutPanel)sender;
+
+            Point p = _destination.PointToClient(new Point(e.X, e.Y));
+            var item = _destination.GetChildAtPoint(p);
+            int index = _destination.Controls.GetChildIndex(item, false);
+            MovePage(data.Name, index);
+        }
+
+        private void btnAddImage_Click(object sender, EventArgs e)
+        {
+            LoadImage();
         }
     }
 }

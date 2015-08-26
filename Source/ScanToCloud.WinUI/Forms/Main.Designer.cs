@@ -120,6 +120,7 @@
             this.btnAddImage.TabIndex = 4;
             this.btnAddImage.Text = "Add &images";
             this.btnAddImage.UseVisualStyleBackColor = true;
+            this.btnAddImage.Click += new System.EventHandler(this.btnAddImage_Click);
             // 
             // btnDiscard
             // 
@@ -156,12 +157,15 @@
             // 
             // flpContentItems
             // 
+            this.flpContentItems.AllowDrop = true;
             this.flpContentItems.AutoScroll = true;
             this.flpContentItems.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flpContentItems.Location = new System.Drawing.Point(3, 16);
             this.flpContentItems.Name = "flpContentItems";
             this.flpContentItems.Size = new System.Drawing.Size(602, 301);
             this.flpContentItems.TabIndex = 0;
+            this.flpContentItems.DragDrop += new System.Windows.Forms.DragEventHandler(this.flpContentItems_DragDrop);
+            this.flpContentItems.DragEnter += new System.Windows.Forms.DragEventHandler(this.flpContentItems_DragEnter);
             // 
             // Main
             // 
