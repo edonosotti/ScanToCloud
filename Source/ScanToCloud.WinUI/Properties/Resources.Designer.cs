@@ -131,5 +131,14 @@ namespace ScanToCloud.WinUI.Properties {
                 return ResourceManager.GetString("LabelScannerSelected", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a You have an unsaved document. Discard all pages?.
+        /// </summary>
+        internal static string WarningDiscardPages {
+            get {
+                return ResourceManager.GetString("WarningDiscardPages", resourceCulture);
+            }
+        }
     }
 }

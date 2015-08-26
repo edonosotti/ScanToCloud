@@ -1,15 +1,14 @@
 ﻿using ScanToCloud.WinUI.DTO;
+using ScanToCloud.WinUI.Helpers;
 using ScanToCloud.WinUI.Properties;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using TWAINWorkingGroupToolkit;
 
@@ -151,7 +150,7 @@ namespace ScanToCloud.WinUI.Forms
                     }
                 }
 
-                Directory.Delete(CurrentDocument.TempPath);
+                try { Directory.Delete(CurrentDocument.TempPath); } catch { }
             }
         }
 
@@ -159,6 +158,7 @@ namespace ScanToCloud.WinUI.Forms
         {
             FlushTemporaryData();
             CurrentDocument = new Document() { TempPath = GetTempFolder() };
+            UpdateDocumentPreview();
         }
 
         private string GetTempFolder()
@@ -178,7 +178,9 @@ namespace ScanToCloud.WinUI.Forms
             {
                 Id = id,
                 Path = Path.Combine(CurrentDocument.TempPath, string.Format("{0}.jpg", id)),
-                IsTemporaryFile = true
+                IsTemporaryFile = true,
+                Width = source.Width,
+                Height = source.Height
             };
             
             //  Set the quality
@@ -201,7 +203,7 @@ namespace ScanToCloud.WinUI.Forms
             foreach (var page in CurrentDocument.Pages)
             {
                 Image source = Image.FromFile(page.Path);
-                PictureBox box = new PictureBox() { Width = 100, Height = 120, SizeMode = PictureBoxSizeMode.CenterImage };
+                PictureBox box = new PictureBox() { Width = 100, Height = 140, SizeMode = PictureBoxSizeMode.CenterImage };
                 box.MouseMove += new System.Windows.Forms.MouseEventHandler(OnMouseMove);
                 Bitmap bitmap = new Bitmap(box.Width, box.Height, PixelFormat.Format32bppPArgb);
                 Graphics graphics = Graphics.FromImage(bitmap);
@@ -253,15 +255,27 @@ namespace ScanToCloud.WinUI.Forms
             {
                 foreach (var file in ofd.FileNames)
                 {
-                    var id = Guid.NewGuid().ToString();
-
-                    var page = new Page()
+                    try
                     {
-                        Id = id,
-                        Path = file
-                    };
+                        Image i = Image.FromFile(file);
 
-                    CurrentDocument.Pages.Add(page);
+                        var id = Guid.NewGuid().ToString();
+
+                        var page = new Page()
+                        {
+                            Id = id,
+                            Path = file,
+                            IsTemporaryFile = false,
+                            Width = i.Width,
+                            Height = i.Height
+                        };
+
+                        CurrentDocument.Pages.Add(page);
+                    }
+                    catch
+                    {
+                        
+                    }
                 }
 
                 UpdateDocumentPreview();
@@ -438,12 +452,34 @@ namespace ScanToCloud.WinUI.Forms
             Point p = _destination.PointToClient(new Point(e.X, e.Y));
             var item = _destination.GetChildAtPoint(p);
             int index = _destination.Controls.GetChildIndex(item, false);
-            MovePage(data.Name, index);
+
+            if (index >= 0)
+            {
+                MovePage(data.Name, index);
+            }
         }
 
         private void btnAddImage_Click(object sender, EventArgs e)
         {
             LoadImage();
+        }
+
+        private void btnNewDocument_Click(object sender, EventArgs e)
+        {
+            if (CurrentDocument.Pages.Any() && !CurrentDocument.IsSaved())
+            {
+                if (MessageBox.Show(Resources.WarningDiscardPages, Resources.AppTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                {
+                    return;
+                }
+            }
+            
+            CreateNewDocument();
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            Pdf.Render(CurrentDocument, Common.ImageSizeMode.Fit);
         }
     }
 }

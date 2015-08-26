@@ -141,4 +141,7 @@
   <data name="LabelScannerSelected" xml:space="preserve">
     <value>Scanner</value>
   </data>
+  <data name="WarningDiscardPages" xml:space="preserve">
+    <value>You have an unsaved document. Discard all pages?</value>
+  </data>
 </root>
