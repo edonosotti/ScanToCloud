@@ -193,6 +193,8 @@ namespace ScanToCloud.WinUI.Forms
 
         private void UpdateDocumentPreview()
         {
+            flpContentItems.Controls.Clear();
+
             foreach (var page in CurrentDocument.Pages)
             {
                 Image source = Image.FromFile(page.Path);
@@ -222,6 +224,8 @@ namespace ScanToCloud.WinUI.Forms
 
                 flpContentItems.Controls.Add(box);
             }
+
+            flpContentItems.Update();
         }
 
         private bool IsCustomDsDataSupported()
@@ -301,7 +305,7 @@ namespace ScanToCloud.WinUI.Forms
             int a_iImageOffset
         )
         {
-            // Let us be called from any thread...
+            // Let us be called from any thread
             if (this.InvokeRequired)
             {
                 // We need a copy of the bitmap, because we're not going to wait
@@ -312,26 +316,21 @@ namespace ScanToCloud.WinUI.Forms
                 return (TWAINCSToolkit.MSG.ENDXFER);
             }
 
-            // We're processing end of scan...
             if (a_bitmap == null)
             {
                 // Report errors, but only if the driver's indicators have
                 // been turned off, otherwise we'll hit the user with multiple
-                // dialogs for the same error...
-                //if (!m_blIndicators && (a_sts != TWAINCSToolkit.STS.SUCCESS))
-                //{
-                //    MessageBox.Show("End of session status: " + a_sts);
-                //}
-
-                // Get ready for the next scan...
-                //SetButtons(EBUTTONSTATE.OPEN);
-                //return (TWAINCSToolkit.MSG.ENDXFER);
+                // dialogs for the same error
+                if (!Settings.Default.ShowDriverMessages && (a_sts != TWAINCSToolkit.STS.SUCCESS))
+                {
+                    HandleError(string.Format("{0}: {1}", Resources.ErrorFromSource, a_sts));
+                }
+            }
+            else
+            {
+                AddPage(a_bitmap);
             }
 
-            // Display the image...
-            // LoadImage(a_bitmap);
-
-            // All done...
             return (TWAINCSToolkit.MSG.ENDXFER);
         }
 
@@ -341,6 +340,7 @@ namespace ScanToCloud.WinUI.Forms
 
         private void Main_Load(object sender, EventArgs e)
         {
+            CreateNewDocument();
             InitTwain();
         }
 

@@ -132,6 +132,9 @@
   <data name="ErrorCaption" xml:space="preserve">
     <value>Errore</value>
   </data>
+  <data name="ErrorFromSource" xml:space="preserve">
+    <value>An error has occurred</value>
+  </data>
   <data name="ErrorGeneric" xml:space="preserve">
     <value>Generic error.</value>
   </data>

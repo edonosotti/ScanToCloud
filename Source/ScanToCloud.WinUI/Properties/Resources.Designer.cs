@@ -106,6 +106,15 @@ namespace ScanToCloud.WinUI.Properties {
         }
         
         /// <summary>
+        ///   Cerca una stringa localizzata simile a An error has occurred.
+        /// </summary>
+        internal static string ErrorFromSource {
+            get {
+                return ResourceManager.GetString("ErrorFromSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Cerca una stringa localizzata simile a Generic error..
         /// </summary>
         internal static string ErrorGeneric {
