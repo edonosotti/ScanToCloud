@@ -34,5 +34,17 @@ namespace ScanToCloud.WinUI.Properties {
                 this["ShowDriverMessages"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DefaultAuthorName {
+            get {
+                return ((string)(this["DefaultAuthorName"]));
+            }
+            set {
+                this["DefaultAuthorName"] = value;
+            }
+        }
     }
 }

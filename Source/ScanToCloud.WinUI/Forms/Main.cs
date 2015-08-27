@@ -172,7 +172,9 @@ namespace ScanToCloud.WinUI.Forms
             tabDocument.SelectedIndex = 0;
 
             txtTitle.Text = string.Empty;
-            txtAuthor.Text = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            txtAuthor.Text = (!string.IsNullOrEmpty(Settings.Default.DefaultAuthorName)) ? 
+                Settings.Default.DefaultAuthorName : 
+                System.Security.Principal.WindowsIdentity.GetCurrent().Name.Split('\\').LastOrDefault();
             txtSubject.Text = string.Empty;
             txtKeywords.Text = string.Empty;
         }
@@ -317,6 +319,9 @@ namespace ScanToCloud.WinUI.Forms
                 MessageBox.Show(Resources.ErrorNoPages, Resources.AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
+            Settings.Default.DefaultAuthorName = txtAuthor.Text;
+            Settings.Default.Save();
 
             var sfd = new SaveFileDialog();
 
