@@ -8,9 +8,8 @@
             Stretch
         }
 
-        public enum StorageType
+        public enum CloudType
         {
-            Local,
             Dropbox,
             OneDrive,
             Box

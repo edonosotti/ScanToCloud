@@ -46,5 +46,17 @@ namespace ScanToCloud.WinUI.Properties {
                 this["DefaultAuthorName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string StoredCloudCredentials {
+            get {
+                return ((string)(this["StoredCloudCredentials"]));
+            }
+            set {
+                this["StoredCloudCredentials"] = value;
+            }
+        }
     }
 }

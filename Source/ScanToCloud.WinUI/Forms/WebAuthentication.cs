@@ -9,25 +9,25 @@ namespace ScanToCloud.WinUI.Forms
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private string Url = "";
-        private Common.StorageType ClientType;
+        private Common.CloudType CloudType;
 
         public bool Success { get; private set; }
 
-        public WebAuthentication(Common.StorageType clientType, string url)
+        public WebAuthentication(Common.CloudType cloudType, string url)
         {
             InitializeComponent();
 
             Success = false;
 
             Url = url;
-            ClientType = clientType;
+            CloudType = cloudType;
 
             SetupUI();
         }
 
         private void SetupUI()
         {
-            if (ClientType == Common.StorageType.Dropbox)
+            if (CloudType == Common.CloudType.Dropbox)
             {
                 chkSaveLogin.Enabled = true;
             }
@@ -52,7 +52,7 @@ namespace ScanToCloud.WinUI.Forms
         private void wbrMain_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
             if (
-                ClientType == Common.StorageType.Dropbox && 
+                CloudType == Common.CloudType.Dropbox && 
                 !string.IsNullOrEmpty(e.Url.ToString()) && 
                 e.Url.ToString().Contains("/authorize_submit")
                 )

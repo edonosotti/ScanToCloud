@@ -1,4 +1,5 @@
 ﻿using DropNet;
+using ScanToCloud.WinUI.DTO.Cloud;
 using ScanToCloud.WinUI.Interfaces;
 using System;
 
@@ -14,7 +15,7 @@ namespace ScanToCloud.WinUI.Clients
         public DropboxClient()
         {
             Client = new DropNetClient(Common.DropNet.API_KEY, Common.DropNet.API_SECRET);
-            // ToDo: load credentials
+            AutoLogin();
         }
 
         public bool Authenticate()
@@ -22,12 +23,12 @@ namespace ScanToCloud.WinUI.Clients
             try
             {
                 var url = Client.GetTokenAndBuildUrl();
-                var web = new Forms.WebAuthentication(Common.StorageType.Dropbox, url);
+                var web = new Forms.WebAuthentication(Common.CloudType.Dropbox, url);
                 var result = web.ShowDialog();
                 if (web.Success)
                 {
                     var accessToken = Client.GetAccessToken();
-                    // ToDo: save credentials
+                    CloudFactory.SaveCredential(new DropboxCredential() { UserToken = Client.UserLogin.Token, UserSecret = Client.UserLogin.Secret });
                     return true;
                 }
             }
@@ -48,6 +49,16 @@ namespace ScanToCloud.WinUI.Clients
         {
             // Client.UploadFile();
             return true;
+        }
+
+        private void AutoLogin()
+        {
+            var credential = CloudFactory.GetStoredCredential<DropboxCredential>();
+
+            if (credential != null)
+            {
+                Client.UserLogin = new DropNet.Models.UserLogin() { Token = credential.UserToken, Secret = credential.UserSecret };
+            }
         }
     }
 }
